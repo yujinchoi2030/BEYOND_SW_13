@@ -74,24 +74,30 @@ ON DUPLICATE KEY UPDATE NAME = '고길동', BIRTHYEAR = 1900, ADDR = '강원';
 -- 사용자가 COMMIT 명령을 실행하지 않아도 자동으로 모든 명령이 COMMIT되어 즉시 반영 
 SELECT @@AUTOCOMMIT;
 
-SET AUTOCOMMIT = 1;
-SET AUTOCOMMIT = 0;
+SET AUTOCOMMIT = 1; -- 활성화
+SET AUTOCOMMIT = 0; -- 비활성화
+
+-- autocommit이 활성화된 경우 ROLLBACK으로 실행이 취소되지 않는다.
+DELETE FROM usertbl WHERE userid = 'HONG';
  
-DELETE FROM USERTBL WHERE USERID ='LEE123';
-
 SELECT * FROM usertbl;
-
-DELETE FROM USERTBL WHERE USERID ='SUNG123';
-
-SELECT * FROM USERTBL;
 
 ROLLBACK;
 
-DELETE FROM USERTBL WHERE USERID ='SUNG123';
+-- autocommit이 비활성화된 경우 ROLLBACK으로 실행이 취소된다.
+DELETE FROM usertbl WHERE userid = 'sung123';
+
+SELECT * FROM usertbl;
+
+ROLLBACK;
+
+-- autocommit이 비활성화된 경우에 변경 사항을 확정하려면 COMMIT을 실행해야 한다.
+DELETE FROM usertbl WHERE userid = 'sung123';
+
+SELECT * FROM usertbl;
+
 COMMIT;
-SELECT * FROM USERTBL;
-
-
+ROLLBACK;
 
 
 
